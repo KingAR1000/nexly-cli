@@ -8,8 +8,9 @@ NEXLY_CONFIG_DIR="$HOME/.nexly"
 
 echo "Installing Nexly v${NEXLY_VERSION}..."
 
-if [ "$(id -u)" -ne 0 ]; then
-    echo "This script must be run as root (use sudo)"
+if [ "$(id -u)" -eq 0 ]; then
+    echo "Error: Do NOT run as root or with sudo!"
+    echo "Run as regular user: curl -fsSL https://nexlycode.vercel.app/install.sh | bash"
     exit 1
 fi
 
@@ -31,17 +32,9 @@ EOF
     chmod 600 "$NEXLY_CONFIG_DIR/config.json"
 fi
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-
-if [ -f "$SCRIPT_DIR/nexly" ]; then
-    echo "Installing Nexly from local build..."
-    cp "$SCRIPT_DIR/nexly" "$NEXLY_INSTALL_DIR/nexly"
-    chmod +x "$NEXLY_INSTALL_DIR/
-    echo "nexly"
-elseDownloading Nexly binary..."
-    curl -fsSL "https://nexlycode.vercel.app/nexly" -o "$NEXLY_INSTALL_DIR/nexly"
-    chmod +x "$NEXLY_INSTALL_DIR/nexly"
-fi
+echo "Downloading Nexly binary..."
+curl -fsSL "https://nexlycode.vercel.app/nexly" -o "$NEXLY_INSTALL_DIR/nexly"
+chmod +x "$NEXLY_INSTALL_DIR/nexly"
 
 echo ""
 echo "Installation complete!"
